@@ -57,9 +57,9 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'ud_id'=>'required',
-            'device_token'=>'required',
-            'device_type' => 'required',
+//            'ud_id'=>'required',
+//            'device_token'=>'required',
+//            'device_type' => 'required',
 
         ]);
 
@@ -84,9 +84,9 @@ class UserController extends Controller
             $token = JWTAuth::fromUser($user);
             $mobileInfo=MobileInfo::create([
                 'user_id' => $user->id,
-                'ud_id'=>$request->ud_id,
-                'device_token'=>$request->device_token,
-                'device_type' => $request->device_type,
+                'ud_id'=> 'test',//$request->ud_id ,
+                'device_token'=> 'device123',//$request->device_token,
+                'device_type' => 'type123',//$request->device_type,
                 'status' => 'inActive'
             ]);
             $this->setMessage('Thank You!,Please wait for the admin approval');

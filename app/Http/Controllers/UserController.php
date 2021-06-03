@@ -196,7 +196,11 @@ class UserController extends Controller
         }
         $user=User::where('email',$request->email)->first();
         if($user){
-            If($user->status=='Accepted' && $user->otp === $request->otp_code) {
+            If($user->status=='Accepted') {
+                if ($user->otp != $request->otp_code){
+                    $this->setErrors(["invalid Otp"]);
+                    return $this->response();
+                }
                 $user->update(['password' => Hash::make($request->get('password'))]);
                 $this->setMessage('Thank You!,Password Updated Successfully ');
             }else{

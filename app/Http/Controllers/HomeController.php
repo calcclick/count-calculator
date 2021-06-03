@@ -113,7 +113,7 @@ class HomeController extends Controller
                 'status' => 'Accepted',
             ]);
             $this->sendEmail($user->name, $user->email, $user->otp);
-            $this->sendPush('Your Account IS Approved Kindly Enter Otp For Activation','Approved','default','approved',$id);
+//            $this->sendPush('Your Account IS Approved Kindly Enter Otp For Activation','Approved','default','approved',$id);
             return redirect()->with("message", 'Successfully Updated Customer Details!!');
 
         } catch (\Exception $e) {

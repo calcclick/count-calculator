@@ -115,7 +115,7 @@ class HomeController extends Controller
             ]);
 //            $this->sendEmail($user->name, $user->email, $user->otp);
 //            $this->sendPush('Your Account IS Approved Kindly Enter Otp For Activation','Approved','default','approved',$id);
-            return redirect()->with("message", 'Successfully Updated Customer Details!!');
+            return redirect()->back()->with("message", 'Successfully Updated Customer Details!!');
 
         } catch (\Exception $e) {
             Log::info('Error on: ' . __DIR__ . ': ' . __LINE__);

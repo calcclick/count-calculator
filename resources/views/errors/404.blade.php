@@ -6,5 +6,5 @@
 @section('message', __('Cust not Found'))
 
 @section('content')
-    <h1 class="text-danger">Cutomer Not Found! <a href="{{route('details', $customer->id)}}">Go BACK</a></h1>
+    {{--<h1 class="text-danger">Cutomer Not Found! <a href="{{route('details', $customer->id)}}">Go BACK</a></h1>--}}
 @endsection

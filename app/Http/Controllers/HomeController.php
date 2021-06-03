@@ -161,8 +161,7 @@ class HomeController extends Controller
 
     public function customerList(Request $request)
     {
-        $customerQry = User::where('status', 'Accepted')
-            ->where('user_role', 'isCustomer');
+        $customerQry = User::where('status', 'Accepted');
         $user_name = $request->get("user", '');
         $customerQry->when($user_name, function ($sql) use ($user_name) {
             $sql->where('name', 'LIKE', '%' . $user_name . '%');

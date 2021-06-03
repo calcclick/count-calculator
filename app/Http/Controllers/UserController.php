@@ -32,7 +32,7 @@ class UserController extends Controller
         try {
             $user=User::where('email',$request->email)->first();
             if($user){
-                if($user->status==='Accepted') {
+                if($user->verified_at=== 1 && $user->user_role === 'isCustomer') {
                     if (!$token = JWTAuth::attempt($credentials)) {
                         $this->setErrors(['invalid_credentials']);
                         return $this->response();
@@ -42,7 +42,7 @@ class UserController extends Controller
                         'token'=>$token
                     ], 200);
                 }else{
-                    $this->setErrors(['Access Denied,Please Wait for the Admin Approval Thanks!']);
+                    $this->setErrors(['Access Denied,Please Verify Yourself Thanks!']);
                 }
             }else{
                 $this->setErrors(['Email is Invalid']);

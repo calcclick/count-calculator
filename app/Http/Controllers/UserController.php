@@ -31,18 +31,23 @@ class UserController extends Controller
 
         try {
             $user=User::where('email',$request->email)->first();
-            if($user->status==='Accepted') {
-                if (!$token = JWTAuth::attempt($credentials)) {
-                    $this->setErrors(['invalid_credentials']);
-                    return $this->response();
+            if($user){
+                if($user->status==='Accepted') {
+                    if (!$token = JWTAuth::attempt($credentials)) {
+                        $this->setErrors(['invalid_credentials']);
+                        return $this->response();
+                    }
+                    $this->setData([
+                        'user' => $user,
+                        'token'=>$token
+                    ], 200);
+                }else{
+                    $this->setErrors(['Access Denied,Please Wait for the Admin Approval Thanks!']);
                 }
-                $this->setData([
-                    'user' => $user,
-                    'token'=>$token
-                ], 200);
             }else{
-                $this->setErrors(['Access Denied,Please Wait for the Admin Approval Thanks!']);
+                $this->setErrors(['Email is Invalid']);
             }
+
 
         } catch (JWTException $e) {
             return response()->json(['error' => 'could_not_create_token'], 500);
@@ -57,9 +62,6 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-//            'ud_id'=>'required',
-//            'device_token'=>'required',
-//            'device_type' => 'required',
 
         ]);
 
@@ -82,18 +84,65 @@ class UserController extends Controller
             ]);
             $user->generateOtp();
             $token = JWTAuth::fromUser($user);
-            $mobileInfo=MobileInfo::create([
-                'user_id' => $user->id,
-                'ud_id'=> 'test',//$request->ud_id ,
-                'device_token'=> 'device123',//$request->device_token,
-                'device_type' => 'type123',//$request->device_type,
-                'status' => 'inActive'
-            ]);
             $this->setMessage('Thank You!,Please wait for the admin approval');
         }else{
             $this->setErrors(['Email Already Exist Please Try another email']);
         }
         return $this->response();
+    }
+    public function updateMobileInfo(Request $request){
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'ud_id'=>'required',
+            'device_token'=>'required',
+            'device_type' => 'required',
+
+        ]);
+
+        if ($validator->fails()) {
+            $error = $validator->errors()->first();
+            $this->setErrors([
+                $error
+            ], 400);
+
+            return $this->response();
+        }
+        $user = User::where('email', $request->email)->first();
+        if($user){
+            $updateMobileInfo=MobileInfo::where('user_id',$user->id)
+                ->where('status','active')
+                ->first();
+            if($updateMobileInfo){
+                $updateMobileInfo->update([
+                    'status'=>'inActive'
+                ]);
+                $updateMobileInfo->save();
+                $mobileInfo=MobileInfo::create([
+                    'user_id' => $user->id,
+                    'ud_id'=> $request->ud_id ,
+                    'device_token'=> $request->device_token,
+                    'device_type' => $request->device_type,
+                    'status' => 'active'
+                ]);
+                $this->setErrors(['Mobile Info Updated Successful']);
+            }else{
+                $mobileInfo=MobileInfo::create([
+                    'user_id' => $user->id,
+                    'ud_id'=> $request->ud_id ,
+                    'device_token'=> $request->device_token,
+                    'device_type' => $request->device_type,
+                    'status' => 'active'
+                ]);
+
+                $this->setErrors(['Mobile Info Updated Successful']);
+
+            }
+
+        }else{
+            $this->setErrors(['inValid Email']);
+        }
+        return $this->response();
+
     }
     public function forgetPassword(Request $request)
     {

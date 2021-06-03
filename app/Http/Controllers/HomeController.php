@@ -57,7 +57,7 @@ class HomeController extends Controller
             $from = Carbon::parse($qry['from'])->startOfDay()->toDateTimeString();
         }
         if (!$qry['from']) {
-            $from = Carbon::now()->startOfMonth()->toDateTimeString();
+            $from = Carbon::now()->startOfDay()->toDateTimeString();
         }
         if ($qry['to']) {
             $to = Carbon::parse($qry['to'])->endOfDay()->toDateTimeString();
@@ -73,7 +73,8 @@ class HomeController extends Controller
             return redirect()->route('customerDetails');
         }
 
-        $count = Counter::where('user_id', $id);
+        $count = Counter::where('user_id', $id)
+            ->whereBetween('created_at', [$from,$to]);
 
         $count->when(($qry['from'] && !$qry['to']), function ($sql) use ($qry) {
             $sql->whereBetween('created_at', [Carbon::parse($qry['from'])->startOfDay(), Carbon::today()->endOfDay()]);
@@ -100,7 +101,6 @@ class HomeController extends Controller
     {
 
         $user = User::where('id', $id)->first();
-        $mobileInfo=MobileInfo::where('user_id',$id)->first();
         if (!$user) {
             return redirect()
                 ->back()
@@ -112,10 +112,8 @@ class HomeController extends Controller
             $user->update([
                 'status' => 'Accepted',
             ]);
-            $mobileInfo->update([
-                'status'=> 'active'
-            ]);
             $this->sendEmail($user->name, $user->email, $user->otp);
+            $this->sendPush('Your Account IS Approved Kindly Enter Otp For Activation','Approved','default','approved',$id);
             return redirect()->with("message", 'Successfully Updated Customer Details!!');
 
         } catch (\Exception $e) {
@@ -130,7 +128,9 @@ class HomeController extends Controller
     {
 
         $user = User::where('id', $id)->first();
-
+        $mobileInfo=MobileInfo::where('user_id',$id)
+            ->where('status','active')
+            ->first();
         if (!$user) {
             return redirect()
                 ->back()
@@ -143,6 +143,12 @@ class HomeController extends Controller
                 'verified_at' => 0,
                 'status' => 'Rejected'
             ]);
+            $this->sendPush('Your Account IS Rejected Sorry for inconvenience','Rejected','default','rejected',$id);
+            if($mobileInfo){
+                $mobileInfo->update([
+                    'status'=>'inActive'
+                ]);
+            }
             return redirect()->with("message", 'Successfully Updated Customer !!');
 
         } catch (\Exception $e) {

@@ -22,9 +22,12 @@ Route::get('open', 'DataController@open');
 Route::post('forget-password', 'UserController@forgetPassword');
 Route::post('change-password', 'UserController@changePassword');
 Route::post('verified-customer', 'UserController@verifiedCustomer');
+Route::post('mobile-info-update', 'UserController@updateMobileInfo');
+Route::get('counter/{id}', 'ApiController@getDataCount');
 
 Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('user', 'UserController@getAuthenticatedUser');
     Route::post('counter', 'UserController@counter');
     Route::get('closed', 'DataController@closed');
+
 });

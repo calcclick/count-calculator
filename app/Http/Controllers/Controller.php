@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\MobileInfo;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Mail;
-
-
+use Edujugon\PushNotification\PushNotification;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -198,10 +198,14 @@ class Controller extends BaseController
             'type'    => $type
         ];
         if($type=='notice'){
-            $tokens = AmbassadorMobileInfo::pluck('device_token')->toArray();
+            $tokens = MobileInfo::pluck('device_token')
+                ->where('status','active')
+                ->toArray();
         }
         else{
-            $tokens=AmbassadorMobileInfo::where('ambassador_id',$id)->first();
+            $tokens=MobileInfo::where('user_id',$id)
+                ->where('status','active')
+                ->first();
             $tokens=[$tokens->device_token];
         }
 
@@ -209,7 +213,7 @@ class Controller extends BaseController
         $push = new PushNotification('fcm');
         $push->setMessage($complete_message)
 
-            ->setApiKey('AAAA9VOEOuo:APA91bGo6u3AsRf_3sjvwLjzQV0q_WD8-T09gDQQz3KvkNS77DUeIJvTCwxE7usI2XwxWfjTBk10Ce3E1nDG7aBM2JpTY86wZ48NWkIOe1I2sD-bE9tYecfLLmEph8qKS0aaOdLDQTYD')
+            ->setApiKey('AAAAGae8PKw:APA91bGorUCbancynoQswg1Hrhcs8KEomG-SgcguCOzygUZT99-i7ubzpMx0mzT9G0qH_q8OD2KGcqCRL2Ncm8xBJ0ZdIQUUDl7G993vV_5uNEgkdVdkK8PnbiRNWKR4MjeMUA4XEp92')
             ->setDevicesToken($tokens)
             ->send();
 

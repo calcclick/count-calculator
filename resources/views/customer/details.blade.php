@@ -14,7 +14,14 @@
                         </h4>
 
                     @endif
+                        <?php
 
+                        $month = date('m');
+                        $day = date('d');
+                        $year = date('Y');
+
+                        $today = $year . '-' . $month . '-' . $day;
+                        ?>
                 </div>
                 <div class="col-6">
 
@@ -22,7 +29,7 @@
                         <div class="input-group-prepend">
                             <button class="input-group-text text-primary">From</button>
                         </div>
-                        <input value="{{$qry['from'] !== '' ? $qry['from'] : ''}}" id="from-date" type="date"
+                        <input value="{{$qry['from'] !== '' ? $qry['from'] : $today}}" id="from-date" type="date"
                                class="form-control bg-light " name="from">
                         {{--<input value="{{$qry['to'] !== '' ? $qry['to'] : ''}}" id="to-date" type="date" class="bg-light form-control " name="to"/>--}}
 
@@ -43,7 +50,7 @@
                         <div class="input-group-prepend">
                             <button class="input-group-text text-primary">To</button>
                         </div>
-                        <input value="{{$qry['to'] !== '' ? $qry['to'] : ''}}" id="to-date" type="date"
+                        <input value="{{$qry['to'] !== '' ? $qry['to'] : $today}}" id="to-date" type="date"
                                class="form-control bg-light " name="to">
                     </div>
                 </div>
@@ -64,9 +71,9 @@
                 <div class="col-lg-5 d-flex justify-content-around align-items-center bg-white py-5">
                     {{--@if($count)--}}
                     <div><img style="width: 80px" src="{{ URL::to('/image/up.png') }}"></div>
-                    <div><h4 class="font-weight-bold"> {{$count ? $count->counter_up : 0}} </h4></div>
+                    <div><h4 id="counter-up" class="font-weight-bold"> {{$count ? $count->counter_up : 0}} </h4></div>
                     <div><img style="width: 70px" src="{{ URL::to('/image/down.png') }}"></div>
-                    <div><h4 class="font-weight-bold">{{$count ? $count->counter_down : 0}} </h4></div>
+                    <div><h4 id="counter-down" class="font-weight-bold">{{$count ? $count->counter_down : 0}} </h4></div>
                     {{--@else--}}
                     {{--<div class="alert-info">No Record found.</div>--}}
                     {{--@endif--}}
@@ -136,8 +143,14 @@
             });
 
             // The rest of the code goes here!
-
+            setInterval(function () {
+                $.ajax({
+                    url: '/api/counter/{{$customer->id}}'
+                }).done(function (value) {
+                    $("#counter-up").text(value.data.counter.counter_up);
+                    $("#counter-down").text(value.data.counter.counter_down);
+                })
+            }, 1500)
         }));
-
     </script>
 @endsection

@@ -17,14 +17,14 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@customerList')->name('customerDetails ')->middleware('auth');
-Route::get('/customer-details', 'HomeController@customerList')->name('customerDetails')->middleware('auth');
-Route::get('/new-customer', 'HomeController@newCustomer')->name('newCustomer')->middleware('auth');
-Route::get('/detail/{id}', 'HomeController@detail')->name('details')->middleware('auth');
-Route::get('/approved/{id}', 'HomeController@approvedCustomer')->name('approved')->middleware('auth');
-Route::get('/reject/{id}', 'HomeController@rejectCustomer')->name('reject')->middleware('auth');
-Route::get('/customer-list', 'HomeController@customerList')->name('list')->middleware('auth');
-Route::get('/unauthorised', 'HomeController@unauthorised')->name('unauthorised')->middleware('auth');
+Route::get('/', 'HomeController@customerList')->name('customerDetails ')->middleware(['auth', 'CheckAdminAuth']);
+Route::get('/customer-details', 'HomeController@customerList')->name('customerDetails')->middleware(['auth', 'CheckAdminAuth']);
+Route::get('/new-customer', 'HomeController@newCustomer')->name('newCustomer')->middleware(['auth', 'CheckAdminAuth']);
+Route::get('/detail/{id}', 'HomeController@detail')->name('details')->middleware(['auth', 'CheckAdminAuth']);
+Route::get('/approved/{id}', 'HomeController@approvedCustomer')->name('approved')->middleware(['auth', 'CheckAdminAuth']);
+Route::get('/reject/{id}', 'HomeController@rejectCustomer')->name('reject')->middleware(['auth', 'CheckAdminAuth']);
+Route::get('/customer-list', 'HomeController@customerList')->name('list')->middleware(['auth', 'CheckAdminAuth']);
+Route::get('/unauthorised', 'HomeController@unauthorised')->name('unauthorised')->middleware(['auth', 'CheckAdminAuth']);
 //Route::group(['prefix' => '/customer', 'namespace' => 'customer'], function(){
 //
 //});

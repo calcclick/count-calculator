@@ -128,6 +128,9 @@
 </head>
 <body>
 <div id="app" style="background: #F5F5F5">
+    @php
+        $user = Auth::user();
+    @endphp
     <div class="">
         <nav class="navbar top-nav navbar-expand-md navbar-light  shadow-sm " style="background: #F5F5F5">
             <div class="container">
@@ -163,7 +166,7 @@
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                    {{ $user->name }} <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -187,7 +190,7 @@
 
 
         <div class="container">
-            @if(Auth::user()->user_role === 'isAdmin')
+            @if($user ? $user->user_role === 'isAdmin' : FALSE)
                 <div class="sidebar bg-dark">
                     <nav class="navbar navbar-expand-lg px-0 ">
                         <div class="collapse navbar-collapse w-100" id="navbarText">
@@ -211,7 +214,7 @@
                 </div>
             @endif
 
-            <div class="content {{(Auth::user()->user_role !== 'isAdmin') ? 'col-6' : 'offset-2 col-9'}}">
+            <div class="content {{($user ? $user->user_role !== 'isAdmin' : '') ? 'col-6' : 'offset-2 col-9'}}">
                 @yield('content')
             </div>
         </div>

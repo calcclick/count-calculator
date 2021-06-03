@@ -150,7 +150,7 @@
                     $("#counter-up").text(value.data.counter.counter_up);
                     $("#counter-down").text(value.data.counter.counter_down);
                 })
-            }, 1500)
+            }, 500)
         }));
     </script>
 @endsection

@@ -182,7 +182,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6',
             'otp_code'=>'required'
         ]);
 
@@ -196,7 +196,7 @@ class UserController extends Controller
         }
         $user=User::where('email',$request->email)->first();
         if($user){
-            If($user->status==='Accepted' && $user->otp === $request->otp_code) {
+            If($user->status=='Accepted' && $user->otp === $request->otp_code) {
                 $user->update(['password' => Hash::make($request->get('password'))]);
                 $this->setMessage('Thank You!,Password Updated Successfully ');
             }else{

@@ -6,6 +6,7 @@ use App\MobileInfo;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use PHPUnit\Framework\CodeCoverageException;
 use App\Counter;
@@ -117,6 +118,9 @@ class HomeController extends Controller
             return redirect()->with("message", 'Successfully Updated Customer Details!!');
 
         } catch (\Exception $e) {
+            Log::info('Error on: ' . __DIR__ . ': ' . __LINE__);
+            Log::error($e);
+
             return redirect()
                 ->back()
                 ->withErrors($e->getMessage())

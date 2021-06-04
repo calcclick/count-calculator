@@ -98,6 +98,44 @@ class HomeController extends Controller
         return view('customer.details', compact('customer', 'count', 'qry'));
     }
 
+    public function resetUserCount(Request $request){
+
+
+dump($request->toArray());
+
+        $id = $request->get('user_id');
+
+//        Counter::fin()
+        if ($request->get('reset_type') == 'today'){
+            $from = Carbon::now()->startOfDay()->toDateTimeString();
+            $to = Carbon::now()->endOfDay()->toDateTimeString();
+            $countQry = Counter::where('user_id', $id)
+                ->whereBetween('created_at', [$from,$to]);
+        }else if ($request->get('reset_type') == 'all_date'){
+            $countQry = Counter::where('user_id', $id);
+
+        }else if ($request->get('reset_type') == 'range'){
+
+            if (empty($request->get('from_date')) || empty($request->get('to_date'))){
+                 return redirect()->back()->with('error','range both field is required');
+            }
+
+            $from = Carbon::parse($request->get('from_date'))->startOfDay()->toDateTimeString();
+            $to = Carbon::parse($request->get('to_date'))->endOfDay()->toDateTimeString();
+
+            $countQry = Counter::where('user_id', $id)
+                ->whereBetween('created_at', [$from,$to]);
+        }
+        $counts = $countQry->get();
+        foreach ($counts as $count ){
+            $count->counter_up = 0;
+            $count->counter_down = 0;
+            $count->save();
+        }
+       return redirect()->back()->with('success','reset Successfully !');
+
+    }
+
     public function approvedCustomer(Request $request, $id)
     {
 

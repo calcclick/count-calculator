@@ -2,6 +2,18 @@
 
 @section('content')
     <div class="border">
+
+        @if(Session::has('error'))
+            <div class="alert alert-danger">
+                {{ Session::get('error')}}
+            </div>
+        @endif
+
+            @if(Session::has('success'))
+                <div class="alert alert-success">
+                    {{ Session::get('success')}}
+                </div>
+            @endif
         <div>
             <h3 class=" p-2 border-bottom" style="font-weight:bold ;background: #F5F5F5">CUSTOMER DETAIL</h3>
         </div>
@@ -65,7 +77,7 @@
 
         </div>
         <div>
-            <h3 class=" p-2 border-bottom" style="font-weight:bold ;background: #F5F5F5">Total Count</h3>
+            <h3 class=" p-2 border-bottom" style="font-weight:bold ;background: #F5F5F5">Total Count <button class="btn btn-danger float-right" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Reset</button></h3>
             <div class="bg-white w-100">
 
                 <div class="col-lg-5 d-flex justify-content-around align-items-center bg-white py-5">
@@ -80,6 +92,55 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Reset Data for <span style="color: maroon">{{$customer->name}}</span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{{route('reset.count')}}">
+                        @csrf
+                        <input type="hidden" name="user_id" value="{{$customer->id}}">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reset_type" id="flexRadioDefault1" value="today" checked>
+                            <label class="form-check-label" for="today">
+                                Today
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reset_type" id="flexRadioDefault2" value="all_date">
+                            <label class="form-check-label" for="all_date">
+                                All Date
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reset_type" id="flexRadioDefault2" value="range">
+                            <label class="form-check-label" for="range">
+                                Range &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input class="" type="date" name="from_date">
+                                <input class="" type="date" name="to_date">
+                            </label>
+                        </div>
+                        <br/>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Reset</button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
         </div>
     </div>
     <script>

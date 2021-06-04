@@ -101,7 +101,7 @@ class HomeController extends Controller
     public function resetUserCount(Request $request){
 
 
-dump($request->toArray());
+//dump($request->toArray());
 
         $id = $request->get('user_id');
 

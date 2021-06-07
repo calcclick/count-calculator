@@ -78,15 +78,6 @@ class HomeController extends Controller
         $count = Counter::where('user_id', $id)
             ->whereBetween('created_at', [$from,$to]);
 
-        $count->when(($qry['from'] && !$qry['to']), function ($sql) use ($qry) {
-            $sql->whereBetween('created_at', [Carbon::parse($qry['from'])->startOfDay(), Carbon::today()->endOfDay()]);
-        });
-
-
-        $count->when(!$qry['from'] && $qry['to'], function ($sql) use ($qry) {
-            $sql->whereBetween('created_at', [Carbon::parse($qry['to'])->subDay()->startOfDay(), Carbon::parse($qry['to'])->endOfDay()]);
-        });
-
 
         $count->when($qry['from'] && $qry['to'], function ($sql) use ($qry) {
             $sql->whereBetween('created_at', [Carbon::parse($qry['from'])->startOfDay(), Carbon::parse($qry['to'])->endOfDay()]);
@@ -242,7 +233,12 @@ class HomeController extends Controller
 //            return redirect()
 //                ->back();
 //        }else{
-//            $timeSettings->up
+//            $time->update([
+//                'time_setting'=>$request->time
+//            ]);
+//            $time->save();
+//            return redirect()
+//                ->back();
 //        }
 //
 //    }

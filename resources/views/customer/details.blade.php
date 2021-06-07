@@ -16,6 +16,12 @@
             @endif
         <div>
             <h3 class=" p-2 border-bottom" style="font-weight:bold ;background: #F5F5F5">CUSTOMER DETAIL</h3>
+            {{--<div class="input-group h-100 col-3 my-2">--}}
+                {{--<div class="input-group-prepend">--}}
+                    {{--<button class="input-group-text text-primary" onclick="submitFrom()">search</button>--}}
+                {{--</div>--}}
+                {{--<input id="time" type="number" class="form-control bg-light " name="from">--}}
+            {{--</div>--}}
         </div>
         <div class="border-bottom mb-2 bg-white">
             <div class="px-2 py-4  justify-content-center align-items-center row">
@@ -208,8 +214,8 @@
                 $.ajax({
                     url: '/api/counter/{{$customer->id}}'
                 }).done(function (value) {
-                    $("#counter-up").text(value.data.counter.counter_up);
-                    $("#counter-down").text(value.data.counter.counter_down);
+                    $("#counter-up").val(value.data.counter.counter_up);
+                    $("#counter-down").val(value.data.counter.counter_down);
                 })
             }, 500)
         }));

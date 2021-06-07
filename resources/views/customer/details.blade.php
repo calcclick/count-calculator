@@ -80,12 +80,12 @@
             <h3 class=" p-2 border-bottom" style="font-weight:bold ;background: #F5F5F5">Total Count <button class="btn btn-danger float-right" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Reset</button></h3>
             <div class="bg-white w-100">
 
-                <div class="col-lg-5 d-flex justify-content-around align-items-center bg-white py-5">
+                <div class="col-lg-7 d-flex justify-content-around align-items-center bg-white py-5">
                     {{--@if($count)--}}
-                    <div><img style="width: 80px" src="{{ URL::to('/image/up.png') }}"></div>
-                    <div><h4 id="counter-up" class="font-weight-bold"> {{$count ? $count->counter_up : 0}} </h4></div>
-                    <div><img style="width: 70px" src="{{ URL::to('/image/down.png') }}"></div>
-                    <div><h4 id="counter-down" class="font-weight-bold">{{$count ? $count->counter_down : 0}} </h4></div>
+                    <div><img style="width: 150px" src="{{ URL::to('/image/pluscount.png') }}"></div>
+                    <div><input type="text" id="counter-up" disabled value="{{$count ? $count->counter_up : 0}}" style="width:100px " class="h2 font-weight-bold" /></div>
+                    <div><img style="width: 140px" src="{{ URL::to('/image/down.png') }}"></div>
+                    <div><input type="text" id="counter-down" disabled value="{{$count ? $count->counter_down : 0}}" style="width:100px " class=" h2  font-weight-bold"/></div>
                     {{--@else--}}
                     {{--<div class="alert-info">No Record found.</div>--}}
                     {{--@endif--}}

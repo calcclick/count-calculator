@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\MobileInfo;
+use App\TimeSetting;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -219,4 +220,30 @@ class HomeController extends Controller
     public function unauthorised(){
         return view('not-admin');
     }
+//    public function timeSetting(Request $request,$id){
+//        $validator = Validator::make($request->all(), [
+//            'time' => 'required',
+//        ]);
+//
+//        if ($validator->fails()) {
+//            $error = $validator->errors()->first();
+//            $this->setErrors([
+//                $error
+//            ], 400);
+//
+//            return $this->response();
+//        }
+//        $time=TimeSetting::find(id);
+//        if(!$time){
+//            $timeSettings = TimeSetting::create([
+//                'id' => $id,
+//                'time_setting' => $request->time
+//            ]);
+//            return redirect()
+//                ->back();
+//        }else{
+//            $timeSettings->up
+//        }
+//
+//    }
 }

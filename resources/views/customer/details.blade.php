@@ -82,9 +82,9 @@
 
                 <div class="col-lg-7 d-flex justify-content-around align-items-center bg-white py-5">
                     {{--@if($count)--}}
-                    <div><img style="width: 150px" src="{{ URL::to('/image/pluscount.png') }}"></div>
+                    <div><img style="width: 110px" src="{{ URL::to('/image/pluscount.png') }}"></div>
                     <div><input type="text" id="counter-up" disabled value="{{$count ? $count->counter_up : 0}}" style="width:100px " class="h2 font-weight-bold" /></div>
-                    <div><img style="width: 140px" src="{{ URL::to('/image/down.png') }}"></div>
+                    <div><img style="width: 100px" src="{{ URL::to('/image/down.png') }}"></div>
                     <div><input type="text" id="counter-down" disabled value="{{$count ? $count->counter_down : 0}}" style="width:100px " class=" h2  font-weight-bold"/></div>
                     {{--@else--}}
                     {{--<div class="alert-info">No Record found.</div>--}}

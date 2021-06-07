@@ -26,6 +26,7 @@ Route::get('/reject/{id}', 'HomeController@rejectCustomer')->name('reject')->mid
 Route::get('/customer-list', 'HomeController@customerList')->name('list')->middleware(['auth', 'CheckAdminAuth']);
 Route::get('/unauthorised', 'HomeController@unauthorised')->name('unauthorised')->middleware(['auth', 'CheckAdminAuth']);
 Route::post('/reset/count', 'HomeController@resetUserCount')->name('reset.count')->middleware(['auth', 'CheckAdminAuth']);
+//Route::post('/time_settings', 'HomeController@timeSetting')->name('time')->middleware(['auth', 'CheckAdminAuth']);
 
 //Route::group(['prefix' => '/customer', 'namespace' => 'customer'], function(){
 //

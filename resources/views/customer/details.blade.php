@@ -94,9 +94,9 @@
                         {{--@csrf--}}
                         {{--<input type="hidden" name="user_id" value="{{$customer->id}}">--}}
                     <div><img style="width: 105px" src="{{ URL::to('/image/pluscount.png') }}"></div>
-                    <div><h4  id="counter-up"  style="width:100px " class="h2 font-weight-bold"/></div>
+                    <div><h4  id="counter-up"  style="width:100px " class="h2 font-weight-bold">{{$count ? $count->counter_up : 0}}</h4></div>
                     <div><img style="width: 100px" src="{{ URL::to('/image/down.png') }}"></div>
-                    <div><h4  id="counter-down"  style="width:100px " class=" h2  font-weight-bold"/></div>
+                    <div><h4  id="counter-down"  style="width:100px " class=" h2  font-weight-bold">{{$count ? $count->counter_down : 0}}</h4></div>
                     <div class="border rounded mb-2"><img style="width: 45px" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" class="btn" id="edit-record" src="{{ URL::to('/image/pencil.png') }}"></div>
                     {{--@else--}}
                     {{--<div class="alert-info">No Record found.</div>--}}

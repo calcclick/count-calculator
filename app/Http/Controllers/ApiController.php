@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\User;
 use App\Counter;
 use Carbon\Carbon;
@@ -10,51 +11,30 @@ use JWTAuth;
 
 class ApiController extends Controller
 {
-   public function getDataCount(Request $request,$id){
-       $qry = $this->getRequestedQuery($request);
-       if ($qry['from']) {
-           $from = Carbon::parse($qry['from'])->startOfDay()->toDateTimeString();
-       }
-       if (!$qry['from']) {
-           $from = Carbon::now()->startOfDay()->toDateTimeString();
-       }
-       if ($qry['to']) {
-           $to = Carbon::parse($qry['to'])->endOfDay()->toDateTimeString();
-       }
+    public function getDataCount(Request $request, $id)
+    {
+        $qry = $this->getRequestedQuery($request);
+        $customer = User::find($id);
 
-       if (!$qry['to']) {
-           $to = Carbon::now()->endOfDay()->toDateTimeString();
-       }
+        if (!$customer) {
+            return redirect()->route('customerDetails');
+        }
 
-       $customer = User::find($id);
+        $count = Counter::where('user_id', $id);
 
-       if(!$customer){
-           return redirect()->route('customerDetails');
-       }
-
-       $count = Counter::where('user_id', $id)
-           ->whereBetween('created_at', [$from,$to]);
-
-       $count->when(($qry['from'] && !$qry['to']), function ($sql) use ($qry) {
-           $sql->whereBetween('created_at', [Carbon::parse($qry['from'])->startOfDay(), Carbon::today()->endOfDay()]);
-       });
+        if(!$request->get('date')) {
+            $count->whereBetween('created_at', [$qry['from']->startOfDay(), $qry['to']->endOfDay()]);
+        }else{
+            $count->whereBetween('created_at', [$qry['date']->startOfDay()->toDateTimeString(), $qry['date']->endOfDay()->toDateTimeString()]);
+        }
 
 
-       $count->when(!$qry['from'] && $qry['to'], function ($sql) use ($qry) {
-           $sql->whereBetween('created_at', [Carbon::parse($qry['to'])->subDay()->startOfDay(), Carbon::parse($qry['to'])->endOfDay()]);
-       });
-
-
-       $count->when($qry['from'] && $qry['to'], function ($sql) use ($qry) {
-           $sql->whereBetween('created_at', [Carbon::parse($qry['from'])->startOfDay(), Carbon::parse($qry['to'])->endOfDay()]);
-       });
-
-       $count = $count->select(DB::raw('SUM(`counter_up`) as counter_up, SUM(`counter_down`) as counter_down, user_id'))
-           ->groupBy('user_id')
-           ->first();
-       $this->setData([
-          'counter'=>$count
-       ]);
-       return $this->response();
-   }
+        $count = $count->select(DB::raw('SUM(`counter_up`) as counter_up, SUM(`counter_down`) as counter_down, user_id'))
+            ->groupBy('user_id')
+            ->first();
+        $this->setData([
+            'counter' => $count
+        ]);
+        return $this->response();
+    }
 }

@@ -55,33 +55,24 @@ class HomeController extends Controller
     public function detail(Request $request, $id)
     {
         $qry = $this->getRequestedQuery($request);
-        if ($qry['from']) {
-            $from = Carbon::parse($qry['from'])->startOfDay()->toDateTimeString();
-        }
-        if (!$qry['from']) {
-            $from = Carbon::now()->startOfDay()->toDateTimeString();
-        }
-        if ($qry['to']) {
-            $to = Carbon::parse($qry['to'])->endOfDay()->toDateTimeString();
-        }
-
-        if (!$qry['to']) {
-            $to = Carbon::now()->endOfDay()->toDateTimeString();
-        }
 
         $customer = User::find($id);
+
+//        dd($request->all());
 
         if(!$customer){
             return redirect()->route('customerDetails');
         }
 
         $count = Counter::where('user_id', $id)
-            ->whereBetween('created_at', [$from,$to]);
+            ->whereBetween('created_at', [$qry['from']->startOfDay(), $qry['to']->endOfDay()]);
 
 
-        $count->when($qry['from'] && $qry['to'], function ($sql) use ($qry) {
-            $sql->whereBetween('created_at', [Carbon::parse($qry['from'])->startOfDay(), Carbon::parse($qry['to'])->endOfDay()]);
-        });
+//        $count->when($qry['from'] && $qry['to'], function ($sql) use ($qry) {
+//            $sql->whereBetween('created_at', [Carbon::parse($qry['from'])->startOfDay(), Carbon::parse($qry['to'])->endOfDay()]);
+//        });
+//        dd($qry['date']);
+
 
         $count = $count->select(DB::raw('SUM(`counter_up`) as counter_up, SUM(`counter_down`) as counter_down, user_id'))
             ->groupBy('user_id')
@@ -210,6 +201,38 @@ class HomeController extends Controller
 
     public function unauthorised(){
         return view('not-admin');
+    }
+    public function saveCount(Request $request){
+        $dateOfRecord= Carbon::parse($request->date);
+
+        $userCount = Counter::where('user_id', $request->user_id)
+            ->whereBetween('created_at',[$dateOfRecord->startOfDay()->toDateTimeString(),$dateOfRecord->endOfDay()->toDateTimeString()])
+            ->get();
+        if (!$userCount) {
+            return redirect()
+                ->back()
+                ->withErrors("Record Not found")
+                ->withInput();
+        }
+
+        try {
+            $userCount->each->delete();
+            $userCountSave=Counter::create([
+                'user_id' => $request->user_id,
+                'counter_up' => $request->counter_up,
+                'counter_down'=>$request->counter_down,
+                'created_at'=> $dateOfRecord
+            ]);
+            return redirect()->back()->with('success','Count Save Successfully !');
+        } catch (\Exception $e) {
+            Log::info('Error on: ' . __DIR__ . ': ' . __LINE__);
+            Log::error($e);
+
+            return redirect()
+                ->back()
+                ->withErrors($e->getMessage())
+                ->withInput();
+        }
     }
 //    public function timeSetting(Request $request,$id){
 //        $validator = Validator::make($request->all(), [

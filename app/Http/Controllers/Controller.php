@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\MobileInfo;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -141,12 +142,11 @@ class Controller extends BaseController
     }
     protected function getRequestedQuery(Request $request){
 //        $qry['ambassador_id'] = $request->get('ambassador') ? $request->get('ambassador') : '';
-        $qry['date'] = $request->get('date') ? $request->get('date') : '';
-//Used atm
+        $qry['date'] = Carbon::parse($request->get('date') ? : date('Y-m-d H:i:s'));;
         $qry['customer_name'] = $request->get('customer_name') ? : '';
         $qry['email'] = $request->get('email') ? $request->get('email') : '';
-        $qry['from'] = $request->get('from') ? : '';
-        $qry['to'] = $request->get('to') ? : '';
+        $qry['from'] = Carbon::parse($request->get('from') ? : date('Y-m-d'));
+        $qry['to'] = Carbon::parse($request->get('to') ? : date('Y-m-d 23:59:59'));
         $qry['month'] = $request->get('month') ? $request->get('month') : '';
 
         return $qry;

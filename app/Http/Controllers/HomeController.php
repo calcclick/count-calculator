@@ -218,13 +218,21 @@ class HomeController extends Controller
         }
         $userCount = Counter::where('user_id', $request->user_id)
             ->whereBetween('created_at',[$from,$to]);
+
+        $up = $request->get('counter_up');
+        $down = $request->get('counter_down');
+
+        $up = !is_null($up) && $up >= 0 ? $up : $request->oldCountUp;
+        $down = !is_null($down) && $down >= 0 ? $down : $request->oldCountdown;
+
         if (!count($userCount->get())) {
+//            dd($request->toArray());
             if($request->from == $request->to){
 
                 $userCountSave=Counter::create([
                     'user_id' => $request->user_id,
-                    'counter_up' => $request->counter_up ,
-                    'counter_down'=>$request->counter_down,
+                    'counter_up' => $up,
+                    'counter_down'=>$down,
                     'created_at'=> $from
                 ]);
                 return redirect()->back()->with('success','Count Save Successfully !');}else {
@@ -233,14 +241,18 @@ class HomeController extends Controller
         }
 
         try {
+//            dd('mila hai', $request->toArray());
             if($request->from == $request->to){
+
             $userCount->get()->each->delete();
+
             $userCountSave=Counter::create([
                 'user_id' => $request->user_id,
-                'counter_up' => $request->counter_up ,
-                'counter_down'=>$request->counter_down,
+                'counter_up' => $up,
+                'counter_down'=> $down,
                 'created_at'=> $from
             ]);
+
             return redirect()->back()->with('success','Count Save Successfully !');}else{
                 return redirect()->back()->with('error','Cant save the record Dates must be same !');
             }

@@ -186,6 +186,8 @@
                         <div><img style="width: 100px" src="{{ URL::to('/image/down.png') }}"></div>
                         <div class="d-flex align-items-center"><input type="text" id="counter-down-m"   style="width:100px " name="counter_down" class=" h2  font-weight-bold"/></div>
                         </div>
+                        <input type="hidden" name="oldCountUp"  value="{{!empty($count)?$count->counter_up:0}}">
+                        <input type="hidden" name="oldCountdown"  value="{{!empty($count)?$count->counter_down:0}}">
                         <div class="modal-footer justify-content-center w-100 pt-3 mt-2">
                             <button class="btn btn-danger px-5" id="save-counter" type="submit" >save</button>
 

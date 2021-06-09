@@ -2,17 +2,6 @@
 @section('content')
     <div class="border">
 
-        @if(Session::has('error'))
-            <div class="alert alert-danger">
-                {{ Session::get('error')}}
-            </div>
-        @endif
-
-            @if(Session::has('success'))
-                <div class="alert alert-success">
-                    {{ Session::get('success')}}
-                </div>
-            @endif
         <div class="d-flex justify-content-between border-bottom " style="background: #F5F5F5">
             <h3 class=" p-2 " style="font-weight:bold ">CUSTOMER DETAIL</h3>
             {{--<div class="input-group h-100 col-3 my-2">--}}
@@ -27,7 +16,7 @@
         </div>
         <div class="border-bottom mb-2 bg-white">
             <form class="form-inline card my-2 mb-2 my-lg-0 d-flex flex-lg-row" id="saveRecord"  action="{{ route('saveCounter') }}" method="post">
-
+                <div class="col-10">
             <div class="px-2 py-4  justify-content-center align-items-center row row w-100">
 
                 <div class="col-6">
@@ -79,8 +68,9 @@
                     </div>
                 </div>
             </div>
+                </div>
 
-            <div class="px-2 py-4  justify-content-end align-items-end row w-100">
+            <div class="px-2 py-4 col-2 justify-content-end align-items-end row w-100">
 
                 <div class="col-12">
                     <input type="button" class="search btn btn-primary float-right" value="Search"/>
@@ -89,7 +79,24 @@
 
         </div>
         <div>
-            <h3 class=" p-2 border-bottom" style="font-weight:bold ;background: #F5F5F5">Total Count <button class="btn btn-danger float-right" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Reset</button></h3>
+            <div class="d-flex border-bottom justify-content-between " style="background: #F5F5F5" >
+            <h3 class=" p-2 " style="font-weight:bold ;background: #F5F5F5">Total Count</h3>
+                <span>
+                @if(Session::has('error'))
+                    <div class="alert alert-danger mb-0">
+                        {{ Session::get('error')}}
+                    </div>
+                @endif
+
+                @if(Session::has('success'))
+                    <div class="alert alert-success mb-0">
+                        {{ Session::get('success')}}
+                    </div>
+                @endif
+                    </span>
+                <button class="btn btn-danger float-right my-2" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Reset</button>
+
+            </div>
             <div class="bg-white w-100">
 
                 <div class="col-lg-7 d-flex justify-content-around align-items-center bg-white py-5">
@@ -329,17 +336,17 @@
 
         }));
     </script>
-    <script>
-        $(document).ready(function() {
-            // var counterDate = $("#save-date").val();
-            // console.log(counterDate);
-            $.ajax({
-                url: '/api/counter/{{$customer->id}}'
-            }).done(function (value) {
-                console.log(value);
-                $("#counter-up-m").val(value.data.counter == null ? 0 : value.data.counter.counter_up  );
-                $("#counter-down-m").val(value.data.counter == null ? 0 : value.data.counter.counter_down);
-            })
-        });
-    </script>
+    {{--<script>--}}
+        {{--$(document).ready(function() {--}}
+            {{--// var counterDate = $("#save-date").val();--}}
+            {{--// console.log(counterDate);--}}
+            {{--$.ajax({--}}
+                {{--url: '/api/counter/{{$customer->id}}'--}}
+            {{--}).done(function (value) {--}}
+                {{--console.log(value);--}}
+                {{--$("#counter-up-m").val(value.data.counter == null ? 0 : value.data.counter.counter_up  );--}}
+                {{--$("#counter-down-m").val(value.data.counter == null ? 0 : value.data.counter.counter_down);--}}
+            {{--})--}}
+        {{--});--}}
+    {{--</script>--}}
 @endsection

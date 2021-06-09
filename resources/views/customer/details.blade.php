@@ -316,10 +316,10 @@
             }, 500);
 
             function counterData() {
-                var counterDate = $("#save-date").val();
-                console.log(counterDate);
+                // var counterDate = $("#save-date").val();
+                // console.log(counterDate);
                 $.ajax({
-                    url: '/api/counter/{{$customer->id}}?date='+counterDate
+                    url: '/api/counter/{{$customer->id}}'
                 }).done(function (value) {
                     console.log(value);
                     $("#counter-up-m").val(value.data.counter == null ? 0 : value.data.counter.counter_up  );
@@ -331,10 +331,10 @@
     </script>
     <script>
         $(document).ready(function() {
-            var counterDate = $("#save-date").val();
-            console.log(counterDate);
+            // var counterDate = $("#save-date").val();
+            // console.log(counterDate);
             $.ajax({
-                url: '/api/counter/{{$customer->id}}?date='+counterDate
+                url: '/api/counter/{{$customer->id}}'
             }).done(function (value) {
                 console.log(value);
                 $("#counter-up-m").val(value.data.counter == null ? 0 : value.data.counter.counter_up  );

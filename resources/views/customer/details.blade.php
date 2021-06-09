@@ -14,8 +14,9 @@
                 {{--<h3>This is the scrolling text </h3>--}}
             {{--</div>--}}
         </div>
-        <div class="border-bottom mb-2 bg-white">
-            <form class="form-inline card my-2 mb-2 my-lg-0 d-flex flex-lg-row" id="saveRecord"  action="{{ route('saveCounter') }}" method="post">
+        <form class="" id="saveRecord"  action="{{ route('saveCounter') }}" method="post">
+        <div class="border-bottom mb-2 bg-white d-flex">
+
                 <div class="col-10">
             <div class="px-2 py-4  justify-content-center align-items-center row row w-100">
 
@@ -42,8 +43,8 @@
                         <div class="input-group-prepend">
                             <button class="input-group-text text-primary">From</button>
                         </div>
-                        <input value="{{$today}}" id="from-date" type="date"
-                               class="form-control bg-light " name="from">
+                        <input  id="from-date" type="date"
+                               class="form-control bg-light " name="from" value="{{$qry['from']->format('Y-m-d')}}">
                         {{--<input value="{{$qry['to'] !== '' ? $qry['to'] : ''}}" id="to-date" type="date" class="bg-light form-control " name="to"/>--}}
 
                     </div>
@@ -63,14 +64,14 @@
                         <div class="input-group-prepend">
                             <button class="input-group-text text-primary">To</button>
                         </div>
-                        <input value="{{$today}}" id="to-date" type="date"
-                               class="form-control bg-light " name="to">
+                        <input  id="to-date" type="date"
+                               class="form-control bg-light " name="to" value="{{$qry['to']->format('Y-m-d')}}">
                     </div>
                 </div>
             </div>
                 </div>
 
-            <div class="px-2 py-4 col-2 justify-content-end align-items-end row w-100">
+            <div class="px-2 py-4 col-2 justify-content-center align-items-center row w-100">
 
                 <div class="col-12">
                     <input type="button" class="search btn btn-primary float-right" value="Search"/>
@@ -94,7 +95,7 @@
                     </div>
                 @endif
                     </span>
-                <button class="btn btn-danger float-right my-2" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Reset</button>
+                <button class="btn btn-danger float-right" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Reset</button>
 
             </div>
             <div class="bg-white w-100">
@@ -271,6 +272,7 @@
             var body = $('body');
             var fromDate = $('#from-date');
             var toDate = $('#to-date');
+            var isToDayActive = !!parseInt('{{(int) ($qry['from']->isToday() && $qry['to']->isToday())}}');
 
 
             $(function () {
@@ -314,12 +316,13 @@
             })
             // The rest of the code goes here!
             setInterval(function () {
+                if(isToDayActive){
                 $.ajax({
                     url: '/api/counter/{{$customer->id}}'
                 }).done(function (value) {
                     $("#counter-up").text(value.data.counter.counter_up);
                     $("#counter-down").text(value.data.counter.counter_down);
-                })
+                })}
             }, 500);
 
             function counterData() {

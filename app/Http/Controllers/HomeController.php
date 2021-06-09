@@ -55,7 +55,6 @@ class HomeController extends Controller
     public function detail(Request $request, $id)
     {
         $qry = $this->getRequestedQuery($request);
-
         $customer = User::find($id);
 
 //        dd($request->all());
@@ -66,7 +65,7 @@ class HomeController extends Controller
 
         $count = Counter::where('user_id', $id)
             ->whereBetween('created_at', [$qry['from']->startOfDay(), $qry['to']->endOfDay()]);
-
+//dd($count->get());
 
 //        $count->when($qry['from'] && $qry['to'], function ($sql) use ($qry) {
 //            $sql->whereBetween('created_at', [Carbon::parse($qry['from'])->startOfDay(), Carbon::parse($qry['to'])->endOfDay()]);
@@ -203,21 +202,30 @@ class HomeController extends Controller
         return view('not-admin');
     }
     public function saveCount(Request $request){
+//dd($request->toArray());
+        if($request->from){
+            $from = Carbon::parse($request->from)->startOfDay()->toDateTimeString();
+        }
+        if(!$request->from){
+            $from = Carbon::now()->startOfDay()->toDateTimeString();
+        }
+        if($request->to){
+            $to = Carbon::parse($request->to)->endOfDay()->toDateTimeString();
+        }
 
-//        dd($request);
-        $dateOfRecord= Carbon::parse($request->date);
-
+        if(!$request->to){
+            $to = Carbon::now()->endOfDay()->toDateTimeString();
+        }
         $userCount = Counter::where('user_id', $request->user_id)
-            ->whereBetween('created_at',[$dateOfRecord->startOfDay()->toDateTimeString(),$dateOfRecord->endOfDay()->toDateTimeString()])
-            ->get();
-        if (!$userCount) {
+            ->whereBetween('created_at',[$from,$to]);
+        if (!count($userCount->get())) {
             if($request->from == $request->to){
-                $userCount->each->delete();
+
                 $userCountSave=Counter::create([
                     'user_id' => $request->user_id,
-                    'counter_up' => $request->counter_up,
+                    'counter_up' => $request->counter_up ,
                     'counter_down'=>$request->counter_down,
-                    'created_at'=> $dateOfRecord
+                    'created_at'=> $from
                 ]);
                 return redirect()->back()->with('success','Count Save Successfully !');}else {
                 return redirect()->back()->with('error', 'Cant save the record Dates must be same !');
@@ -226,12 +234,12 @@ class HomeController extends Controller
 
         try {
             if($request->from == $request->to){
-            $userCount->each->delete();
+            $userCount->get()->each->delete();
             $userCountSave=Counter::create([
                 'user_id' => $request->user_id,
-                'counter_up' => $request->counter_up,
+                'counter_up' => $request->counter_up ,
                 'counter_down'=>$request->counter_down,
-                'created_at'=> $dateOfRecord
+                'created_at'=> $from
             ]);
             return redirect()->back()->with('success','Count Save Successfully !');}else{
                 return redirect()->back()->with('error','Cant save the record Dates must be same !');

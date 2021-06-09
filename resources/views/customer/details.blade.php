@@ -95,7 +95,7 @@
                     </div>
                 @endif
                     </span>
-                <button class="btn btn-danger float-right" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Reset</button>
+                <span class="btn btn-danger float-right" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Reset</span>
 
             </div>
             <div class="bg-white w-100">

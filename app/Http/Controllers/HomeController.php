@@ -211,10 +211,17 @@ class HomeController extends Controller
             ->whereBetween('created_at',[$dateOfRecord->startOfDay()->toDateTimeString(),$dateOfRecord->endOfDay()->toDateTimeString()])
             ->get();
         if (!$userCount) {
-            return redirect()
-                ->back()
-                ->withErrors("Record Not found")
-                ->withInput();
+            if($request->from == $request->to){
+                $userCount->each->delete();
+                $userCountSave=Counter::create([
+                    'user_id' => $request->user_id,
+                    'counter_up' => $request->counter_up,
+                    'counter_down'=>$request->counter_down,
+                    'created_at'=> $dateOfRecord
+                ]);
+                return redirect()->back()->with('success','Count Save Successfully !');}else {
+                return redirect()->back()->with('error', 'Cant save the record Dates must be same !');
+            }
         }
 
         try {

@@ -26,7 +26,10 @@
             {{--</div>--}}
         </div>
         <div class="border-bottom mb-2 bg-white">
-            <div class="px-2 py-4  justify-content-center align-items-center row">
+            <form class="form-inline card my-2 mb-2 my-lg-0 d-flex flex-lg-row" id="saveRecord"  action="{{ route('saveCounter') }}" method="post">
+
+            <div class="px-2 py-4  justify-content-center align-items-center row row w-100">
+
                 <div class="col-6">
                     @if($customer)
                         <h4>
@@ -43,20 +46,21 @@
                         $today = $year . '-' . $month . '-' . $day;
                         ?>
                 </div>
+
                 <div class="col-6">
 
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <button class="input-group-text text-primary">From</button>
                         </div>
-                        <input value="{{$qry['from'] !== '' ? $qry['from'] : $today}}" id="from-date" type="date"
+                        <input value="{{$today}}" id="from-date" type="date"
                                class="form-control bg-light " name="from">
                         {{--<input value="{{$qry['to'] !== '' ? $qry['to'] : ''}}" id="to-date" type="date" class="bg-light form-control " name="to"/>--}}
 
                     </div>
                 </div>
             </div>
-            <div class="px-2 py-4  justify-content-center align-items-center row">
+            <div class="px-2 py-4  justify-content-center align-items-center row row w-100">
                 <div class="col-6">
                     @if($customer)
                         <h4>
@@ -70,13 +74,13 @@
                         <div class="input-group-prepend">
                             <button class="input-group-text text-primary">To</button>
                         </div>
-                        <input value="{{$qry['to'] !== '' ? $qry['to'] : $today}}" id="to-date" type="date"
+                        <input value="{{$today}}" id="to-date" type="date"
                                class="form-control bg-light " name="to">
                     </div>
                 </div>
             </div>
 
-            <div class="px-2 py-4  justify-content-end align-items-end row">
+            <div class="px-2 py-4  justify-content-end align-items-end row w-100">
 
                 <div class="col-12">
                     <input type="button" class="search btn btn-primary float-right" value="Search"/>
@@ -97,7 +101,7 @@
                     <div><h4  id="counter-up"  style="width:100px " class="h2 font-weight-bold">{{$count ? $count->counter_up : 0}}</h4></div>
                     <div><img style="width: 100px" src="{{ URL::to('/image/down.png') }}"></div>
                     <div><h4  id="counter-down"  style="width:100px " class=" h2  font-weight-bold">{{$count ? $count->counter_down : 0}}</h4></div>
-                    <div class="border rounded mb-2"><img style="width: 45px" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" class="btn" id="edit-record" src="{{ URL::to('/image/pencil.png') }}"></div>
+                    {{--<div class="border rounded mb-2"><img style="width: 45px" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" class="btn" id="edit-record" src="{{ URL::to('/image/pencil.png') }}"></div>--}}
                     {{--@else--}}
                     {{--<div class="alert-info">No Record found.</div>--}}
                     {{--@endif--}}
@@ -154,25 +158,26 @@
                     {{--</div>--}}
                 {{--</div>--}}
                 <!-- Allow Model -->
-                <div class="collapse col-6 " id="collapseExample">
+                <div class=" col-6 px-0 card mx-2" id="collapseExample">
                     <form class="form-inline card my-2 mb-2 my-lg-0 d-flex flex-lg-row" id="saveRecord"  action="{{ route('saveCounter') }}" method="post">
                         @csrf
                         <h4 class="w-100 mb-2 card-header">Edit Details:</h4>
-                        <div class="d-flex justify-content-center col-12 pb-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <button class="input-group-text text-primary">Date</button>
-                                </div>
-                                <input value="{{$today}}" id="save-date" type="date"
-                                       class="form-control bg-light " name="date">
-                            </div>
-                        </div>
+                        {{--<div class="d-flex justify-content-center col-12 pb-3">--}}
+                            {{--<div class="input-group">--}}
+                                {{--<div class="input-group-prepend">--}}
+                                    {{--<button class="input-group-text text-primary">Date</button>--}}
+                                {{--</div>--}}
+                                {{--<input value="{{$today}}" id="save-date" type="date"--}}
+                                       {{--class="form-control bg-light " name="date">--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                         <input type="hidden" name="user_id" value="{{$customer->id}}">
+                        <div class="d-flex">
                         <div><img style="width: 105px" src="{{ URL::to('/image/pluscount.png') }}"></div>
-                        <div><input type="text" id="counter-up-m"  style="width:100px " name="counter_up" class="h2 font-weight-bold"/></div>
+                        <div class="d-flex align-items-center"><input type="text" id="counter-up-m"  style="width:100px " name="counter_up" class="h2 font-weight-bold"/></div>
                         <div><img style="width: 100px" src="{{ URL::to('/image/down.png') }}"></div>
-                        <div><input type="text" id="counter-down-m"   style="width:100px " name="counter_down" class=" h2  font-weight-bold"/></div>
-
+                        <div class="d-flex align-items-center"><input type="text" id="counter-down-m"   style="width:100px " name="counter_down" class=" h2  font-weight-bold"/></div>
+                        </div>
                         <div class="modal-footer justify-content-center w-100 pt-3 mt-2">
                             <button class="btn btn-danger px-5" id="save-counter" type="submit" >save</button>
 
@@ -323,5 +328,18 @@
             }
 
         }));
+    </script>
+    <script>
+        $(document).ready(function() {
+            var counterDate = $("#save-date").val();
+            console.log(counterDate);
+            $.ajax({
+                url: '/api/counter/{{$customer->id}}?date='+counterDate
+            }).done(function (value) {
+                console.log(value);
+                $("#counter-up-m").val(value.data.counter == null ? 0 : value.data.counter.counter_up  );
+                $("#counter-down-m").val(value.data.counter == null ? 0 : value.data.counter.counter_down);
+            })
+        });
     </script>
 @endsection

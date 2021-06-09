@@ -203,6 +203,8 @@ class HomeController extends Controller
         return view('not-admin');
     }
     public function saveCount(Request $request){
+
+//        dd($request);
         $dateOfRecord= Carbon::parse($request->date);
 
         $userCount = Counter::where('user_id', $request->user_id)
@@ -216,6 +218,7 @@ class HomeController extends Controller
         }
 
         try {
+            if($request->from == $request->to){
             $userCount->each->delete();
             $userCountSave=Counter::create([
                 'user_id' => $request->user_id,
@@ -223,7 +226,9 @@ class HomeController extends Controller
                 'counter_down'=>$request->counter_down,
                 'created_at'=> $dateOfRecord
             ]);
-            return redirect()->back()->with('success','Count Save Successfully !');
+            return redirect()->back()->with('success','Count Save Successfully !');}else{
+                return redirect()->back()->with('error','Cant save the record Dates must be same !');
+            }
         } catch (\Exception $e) {
             Log::info('Error on: ' . __DIR__ . ': ' . __LINE__);
             Log::error($e);
@@ -233,6 +238,7 @@ class HomeController extends Controller
                 ->withErrors($e->getMessage())
                 ->withInput();
         }
+
     }
 //    public function timeSetting(Request $request,$id){
 //        $validator = Validator::make($request->all(), [

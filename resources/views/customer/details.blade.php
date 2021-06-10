@@ -95,7 +95,7 @@
                     </div>
                 @endif
                     </span>
-                <span class="btn btn-danger float-right" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Reset</span>
+                <button class="btn btn-danger float-right" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Reset</button>
 
             </div>
             <div class="bg-white w-100">
@@ -182,9 +182,9 @@
                         <input type="hidden" name="user_id" value="{{$customer->id}}">
                         <div class="d-flex">
                         <div><img style="width: 105px" src="{{ URL::to('/image/pluscount.png') }}"></div>
-                        <div class="d-flex align-items-center"><input type="text" id="counter-up-m"  style="width:100px " name="counter_up" class="h2 font-weight-bold"/></div>
+                        <div class="d-flex align-items-center"><input type="text" id="counter-up-m"  style="width:100px " name="counter_up" value="{{!empty($count)?$count->counter_up:0}}" class="h2 font-weight-bold"/></div>
                         <div><img style="width: 100px" src="{{ URL::to('/image/down.png') }}"></div>
-                        <div class="d-flex align-items-center"><input type="text" id="counter-down-m"   style="width:100px " name="counter_down" class=" h2  font-weight-bold"/></div>
+                        <div class="d-flex align-items-center"><input type="text" id="counter-down-m"   style="width:100px " name="counter_down" value={{!empty($count)?$count->counter_down:0}} class=" h2  font-weight-bold"/></div>
                         </div>
                         <input type="hidden" name="oldCountUp"  value="{{!empty($count)?$count->counter_up:0}}">
                         <input type="hidden" name="oldCountdown"  value="{{!empty($count)?$count->counter_down:0}}">

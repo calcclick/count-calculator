@@ -338,6 +338,8 @@
                 }).done(function (value) {
                     $("#counter-up").text(value.data.counter.counter_up);
                     $("#counter-down").text(value.data.counter.counter_down);
+                    $("#counter-up-m").val(value.data.counter == null ? 0 : value.data.counter.counter_up  );
+                    $("#counter-down-m").val(value.data.counter == null ? 0 : value.data.counter.counter_down);
                 })}
                     }
             }, 500);

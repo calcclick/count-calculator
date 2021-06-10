@@ -100,15 +100,15 @@
             </div>
             <div class="bg-white w-100">
 
-                <div class="col-lg-7 d-flex justify-content-around align-items-center bg-white py-5">
+                {{--<div class="col-lg-7 d-flex justify-content-around align-items-center bg-white py-5">--}}
                     {{--@if($count)--}}
                     {{--<form class="form-inline my-2 my-lg-0" id="saveRecord"  action="{{ route('saveCounter') }}" method="post">--}}
                         {{--@csrf--}}
                         {{--<input type="hidden" name="user_id" value="{{$customer->id}}">--}}
-                    <div><img style="width: 105px" src="{{ URL::to('/image/pluscount.png') }}"></div>
-                    <div><h4  id="counter-up"  style="width:100px " class="h2 font-weight-bold">{{$count ? $count->counter_up : 0}}</h4></div>
-                    <div><img style="width: 100px" src="{{ URL::to('/image/down.png') }}"></div>
-                    <div><h4  id="counter-down"  style="width:100px " class=" h2  font-weight-bold">{{$count ? $count->counter_down : 0}}</h4></div>
+                    {{--<div><img style="width: 105px" src="{{ URL::to('/image/pluscount.png') }}"></div>--}}
+                    {{--<div><h4  id="counter-up"  style="width:100px " class="h2 font-weight-bold">{{$count ? $count->counter_up : 0}}</h4></div>--}}
+                    {{--<div><img style="width: 100px" src="{{ URL::to('/image/down.png') }}"></div>--}}
+                    {{--<div><h4  id="counter-down"  style="width:100px " class=" h2  font-weight-bold">{{$count ? $count->counter_down : 0}}</h4></div>--}}
                     {{--<div class="border rounded mb-2"><img style="width: 45px" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" class="btn" id="edit-record" src="{{ URL::to('/image/pencil.png') }}"></div>--}}
                     {{--@else--}}
                     {{--<div class="alert-info">No Record found.</div>--}}
@@ -117,7 +117,7 @@
                         {{--<button class="btn btn-danger mb-2 ml-2" id="save-counter" type="submit" >save</button>--}}
                     {{--</div>--}}
                     {{--</form>--}}
-                </div>
+                {{--</div>--}}
                 <!-- Modal -->
                 {{--<div class="modal fade " id="save{{$customer->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">--}}
                     {{--<div class="modal-dialog">--}}
@@ -166,10 +166,10 @@
                     {{--</div>--}}
                 {{--</div>--}}
                 <!-- Allow Model -->
-                <div class=" col-6 px-0 card mx-2" id="collapseExample">
+                <div class=" col-6 px-0  m-2 p-2" id="collapseExample">
                     <form class="form-inline card my-2 mb-2 my-lg-0 d-flex flex-lg-row" id="saveRecord"  action="{{ route('saveCounter') }}" method="post">
                         @csrf
-                        <h4 class="w-100 mb-2 card-header">Edit Details:</h4>
+                        {{--<h4 class="w-100 mb-2 card-header">Edit Details:</h4>--}}
                         {{--<div class="d-flex justify-content-center col-12 pb-3">--}}
                             {{--<div class="input-group">--}}
                                 {{--<div class="input-group-prepend">--}}

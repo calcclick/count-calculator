@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Counter;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -15,6 +16,7 @@ class UserController extends Controller
 {
     public function authenticate(Request $request)
     {
+        $exp = Carbon::now()->addDays(7)->timestamp;
         $credentials = $request->only('email', 'password');
         $validator = Validator::make($request->all(), [
             'email' => 'required',
@@ -33,7 +35,7 @@ class UserController extends Controller
             $user=User::where('email',$request->email)->first();
             if($user){
                 if($user->verified_at=== 1 && $user->user_role === 'isCustomer') {
-                    if (!$token = JWTAuth::attempt($credentials)) {
+                    if (!$token = JWTAuth::attempt($credentials,['exp' => $exp])) {
                         $this->setErrors(['invalid_credentials']);
                         return $this->response();
                     }

@@ -275,6 +275,7 @@
             var fromDate = $('#from-date');
             var toDate = $('#to-date');
             var isToDayActive = !!parseInt('{{(int) ($qry['from']->isToday() && $qry['to']->isToday())}}');
+            var stopFlag=true;
 
 
             $(function () {
@@ -312,19 +313,33 @@
             $("#edit-record").on('click', function(){
                 counterData();
             });
-
+            $('#counter-up-m').on('focus',function(){
+                stopFlag=false;
+            })
+            $('#counter-down-m').on('focus',function(){
+                stopFlag=false;
+            })
+            $('#counter-up-m').on('focusout',function(){
+                stopFlag=true;
+            })
+            $('#counter-down-m').on('focusout',function(){
+                stopFlag=true;
+            })
             $("#save-date").on('change', function(){
                 counterData();
             })
             // The rest of the code goes here!
             setInterval(function () {
                 if(isToDayActive){
+                    if(stopFlag){
+
                 $.ajax({
                     url: '/api/counter/{{$customer->id}}'
                 }).done(function (value) {
                     $("#counter-up").text(value.data.counter.counter_up);
                     $("#counter-down").text(value.data.counter.counter_down);
                 })}
+                    }
             }, 500);
 
             function counterData() {

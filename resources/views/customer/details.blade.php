@@ -276,6 +276,7 @@
             var toDate = $('#to-date');
             var isToDayActive = !!parseInt('{{(int) ($qry['from']->isToday() && $qry['to']->isToday())}}');
             var stopFlag=true;
+            var isModified=false;
 
 
             $(function () {
@@ -313,16 +314,13 @@
             $("#edit-record").on('click', function(){
                 counterData();
             });
-            $('#counter-up-m').on('focus',function(){
+            $('#counter-up-m, #counter-down-m').on('focus',function(){
                 stopFlag=false;
             })
-            $('#counter-down-m').on('focus',function(){
-                stopFlag=false;
+            $('#counter-up-m, #counter-down-m').on('change',function(){
+                isModified=true;
             })
-            $('#counter-up-m').on('focusout',function(){
-                stopFlag=true;
-            })
-            $('#counter-down-m').on('focusout',function(){
+            $('#counter-up-m, #counter-down-m').on('focusout',function(){
                 stopFlag=true;
             })
             $("#save-date").on('change', function(){
@@ -330,18 +328,26 @@
             })
             // The rest of the code goes here!
             setInterval(function () {
-                if(isToDayActive){
-                    if(stopFlag){
+                if(isToDayActive) {
 
-                $.ajax({
-                    url: '/api/counter/{{$customer->id}}'
-                }).done(function (value) {
-                    $("#counter-up").text(value.data.counter.counter_up);
-                    $("#counter-down").text(value.data.counter.counter_down);
-                    $("#counter-up-m").val(value.data.counter == null ? 0 : value.data.counter.counter_up  );
-                    $("#counter-down-m").val(value.data.counter == null ? 0 : value.data.counter.counter_down);
-                })}
+
+                        $.ajax({
+                            url: '/api/counter/{{$customer->id}}'
+                        }).done(function (value) {
+
+                            $("#counter-up").text(value.data.counter.counter_up);
+                            $("#counter-down").text(value.data.counter.counter_down);
+                            if (stopFlag && !isModified) {
+                                $("#counter-up-m").val(value.data.counter == null ? 0 : value.data.counter.counter_up);
+                                // console.log('helo')
+                                $("#counter-down-m").val(value.data.counter == null ? 0 : value.data.counter.counter_down);
+                                // console.log('hello')
+                            }
+
+                        })
                     }
+
+
             }, 500);
 
             function counterData() {
